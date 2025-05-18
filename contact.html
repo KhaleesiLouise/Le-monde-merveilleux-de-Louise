@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Contact - Le monde merveilleux de Louise</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+  <h1>Le monde merveilleux de Louise</h1>
+  <nav>
+    <a href="index.html">Accueil</a> |
+    <a href="about.html">À propos</a> |
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+<main>
+  <h2>Contactez-moi</h2>
+  <form id="contactForm">
+    <label for="name">Nom :</label><br />
+    <input type="text" id="name" name="name" required /><br />
+    <label for="email">Email :</label><br />
+    <input type="email" id="email" name="email" required /><br />
+    <label for="message">Message :</label><br />
+    <textarea id="message" name="message" required></textarea><br />
+    <button type="submit">Envoyer</button>
+  </form>
+</main>
+<footer>
+  <p>&copy; 2025 Le monde merveilleux de Louise</p>
+</footer>
+
+<script>
+  const form = document.getElementById('contactForm');
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const message = form.message.value.trim();
+    if (name && email && message) {
+      alert(`Merci ${name} pour votre message ! Je vous répondrai bientôt.`);
+      form.reset();
+    } else {
+      alert('Veuillez remplir tous les champs.');
+    }
+  });
+</script>
+</body>
+</html>
