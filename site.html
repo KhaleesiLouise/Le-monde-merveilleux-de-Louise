@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<title>Admin - Publier un article</title>
+<style>
+  body { font-family: Arial, sans-serif; max-width: 600px; margin: 2rem auto; padding: 1rem; background: #f0f0f0; }
+  label, input, textarea, button { display: block; width: 100%; margin-top: 1rem; }
+  input, textarea { padding: 0.5rem; font-size: 1rem; }
+  button { background: #007bff; color: white; padding: 0.7rem; border: none; cursor: pointer; }
+  button:hover { background: #0056b3; }
+</style>
+</head>
+<body>
+
+<h1>Publier un article</h1>
+
+<label for="title">Titre</label>
+<input type="text" id="title" placeholder="Titre de l'article" />
+
+<label for="content">Contenu</label>
+<textarea id="content" rows="10" placeholder="Écris ton article ici..."></textarea>
+
+<button id="publish">Publier</button>
+
+<script>
+document.getElementById('publish').addEventListener('click', () => {
+  const title = document.getElementById('title').value.trim();
+  const content = document.getElementById('content').value.trim();
+
+  if (!title) {
+    alert('Merci de saisir un titre.');
+    return;
+  }
+  if (!content) {
+    alert('Merci de saisir le contenu.');
+    return;
+  }
+
+  const slug = title.toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+  const filename = `article-${slug}.html`;
+
+  const htmlContent = `
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<title>${title}</title>
+</head>
+<body>
+<h1>${title}</h1>
+<p>${content.replace(/\n/g, '<br>')}</p>
+</body>
+</html>`;
+
+  const blob = new Blob([htmlContent], {type: 'text/html'});
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+
+  setTimeout(() => {
+    URL.revokeObjectURL(url);
+    a.remove();
+  }, 100);
+
+  alert(`Article "${title}" téléchargé !`);
+
+  document.getElementById('title').value = '';
+  document.getElementById('content').value = '';
+});
+</script>
+
+</body>
+</html>
