@@ -54,29 +54,17 @@
   button#publish:hover {
     background: #357abd;
   }
-  p.intro-text {
-    margin-top: 1rem;
-    background: #fff8dc;
-    padding: 10px;
-    border-left: 4px solid #f4a261;
-    font-style: italic;
-  }
 </style>
 </head>
 <body>
 
 <h1>Publier un nouvel article</h1>
 
-<label for="title">Titre de l'article</label>
-<input type="text" id="title" placeholder="Titre de l'article" required />
-
-<p class="intro-text">
-Ce blog a comme objectif pour moi d'être un peu plus ouverte aux gens qui m'entourent.  
+<label for="title">Ce blog a comme objectif pour moi d'être un peu plus ouverte aux gens qui m'entourent.  
 N'hésitez pas à me faire vos retours sur Instagram.  
 Je ferai des blogs de temps en temps, j’essaierai deux/trois fois par semaine,  
-mais je ne peux rien vous promettre.  
-Les premiers temps, il est fort possible que j'en écrive même plusieurs par jour, mdrrr.
-</p>
+mais je ne peux rien vous promettre.  </label>
+<input type="text" id="title" placeholder="Titre de l'article" required />
 
 <label for="editor">Contenu de l'article</label>
 
@@ -114,12 +102,14 @@ Les premiers temps, il est fort possible que j'en écrive même plusieurs par jo
       return;
     }
 
+    // Création d'un slug simple pour le nom du fichier
     const slug = title.toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-+|-+$/g, '');
 
     const filename = `article-${slug}.html`;
 
+    // Contenu complet du fichier HTML de l'article
     const articleHTML = `
 <!DOCTYPE html>
 <html lang="fr">
@@ -152,17 +142,22 @@ Les premiers temps, il est fort possible que j'en écrive même plusieurs par jo
 </body>
 </html>`.trim();
 
+    // Création d'un blob contenant le contenu HTML
     const blob = new Blob([articleHTML], { type: 'text/html' });
+
+    // Création d'un lien invisible pour déclencher le téléchargement
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = filename;
+    a.download = filename; // nom du fichier à télécharger
     document.body.appendChild(a);
-    a.click();
+    a.click(); // clique automatique pour lancer le téléchargement
     URL.revokeObjectURL(url);
     a.remove();
 
     alert(`Ton article "${title}" est prêt et téléchargé !`);
+
+    // Réinitialiser les champs
     document.getElementById('title').value = '';
     document.getElementById('editor').innerHTML = '';
   });
@@ -170,4 +165,3 @@ Les premiers temps, il est fort possible que j'en écrive même plusieurs par jo
 
 </body>
 </html>
-
