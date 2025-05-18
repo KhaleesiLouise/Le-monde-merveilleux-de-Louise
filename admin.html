@@ -54,16 +54,32 @@
   button#publish:hover {
     background: #357abd;
   }
+  p.intro-text {
+    margin-top: 1rem;
+    background: #fff8dc;
+    padding: 10px;
+    border-left: 4px solid #f4a261;
+    font-style: italic;
+  }
 </style>
 </head>
 <body>
 
 <h1>Publier un nouvel article</h1>
 
-<label for="title"> Le début de ce blog</label>
+<label for="title">Titre de l'article</label>
 <input type="text" id="title" placeholder="Titre de l'article" required />
 
-<label for="editor">Ce blog a comme objectif pour moi d'être un peu plus ouverte au gens qui m'entoure. Donc n'hésitez pas a me faire vos retour sur instagram. Je ferrais des blogs de temps en temps j'essayerai deux/trois fois par semaine mais je ne peux rien vous promettres. Les premiers temps il est fort possible que j'en écrive même plusieurs par jours mdrrr.</label>
+<p class="intro-text">
+Ce blog a comme objectif pour moi d'être un peu plus ouverte aux gens qui m'entourent.  
+N'hésitez pas à me faire vos retours sur Instagram.  
+Je ferai des blogs de temps en temps, j’essaierai deux/trois fois par semaine,  
+mais je ne peux rien vous promettre.  
+Les premiers temps, il est fort possible que j'en écrive même plusieurs par jour, mdrrr.
+</p>
+
+<label for="editor">Contenu de l'article</label>
+
 <div id="toolbar" aria-label="Barre d’outils d’édition">
   <button type="button" onclick="document.execCommand('bold',false,null);" title="Gras"><b>B</b></button>
   <button type="button" onclick="document.execCommand('italic',false,null);" title="Italique"><i>I</i></button>
@@ -154,3 +170,4 @@
 
 </body>
 </html>
+
