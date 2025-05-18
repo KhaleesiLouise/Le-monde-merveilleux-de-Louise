@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Admin - Publier un article</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 700px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background: #f9f9f9;
+  }
+  label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: bold;
+  }
+  input[type="text"] {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    margin-top: 0.3rem;
+  }
+  #editor {
+    margin-top: 0.3rem;
+    border: 1px solid #ccc;
+    min-height: 250px;
+    padding: 0.5rem;
+    background: white;
+    overflow-y: auto;
+  }
+  #toolbar button {
+    background: #eee;
+    border: 1px solid #ccc;
+    margin-right: 5px;
+    padding: 5px 8px;
+    cursor: pointer;
+  }
+  #toolbar button:hover {
+    background: #ddd;
+  }
+  button#publish {
+    margin-top: 1rem;
+    padding: 0.7rem 1.5rem;
+    font-size: 1.1rem;
+    background: #4a90e2;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  button#publish:hover {
+    background: #357abd;
+  }
+</style>
+</head>
+<body>
+
+<h1>Publier un nouvel article</h1>
+
+<label for="title">Titre de l'article</label>
+<input type="text" id="title" placeholder="Titre de l'article" required />
+
+<label for="editor">Contenu de l'article</label>
+<div id="toolbar" aria-label="Barre d’outils d’édition">
+  <button type="button" onclick="document.execCommand('bold',false,null);" title="Gras"><b>B</b></button>
+  <button type="button" onclick="document.execCommand('italic',false,null);" title="Italique"><i>I</i></button>
+  <button type="button" onclick="document.execCommand('underline',false,null);" title="Souligné"><u>U</u></button>
+  <button type="button" onclick="document.execCommand('insertUnorderedList',false,null);" title="Liste à puces">&bull; Liste</button>
+  <button type="button" onclick="document.execCommand('insertOrderedList',false,null);" title="Liste numérotée">1. Liste</button>
+  <button type="button" onclick="addLink();" title="Insérer un lien">🔗 Lien</button>
+</div>
+
+<div id="editor" contenteditable="true" aria-label="Zone d’édition de contenu"></div>
+
+<button id="publish">Publier</button>
+
+<script>
+  function addLink() {
+    const url = prompt('URL du lien (avec http(s)://)');
+    if (url) {
+      document.execCommand('createLink', false, url);
+    }
+  }
+
+  document.getElementById('publish').addEventListener('click', () => {
+    const title = document.getElementById('title').value.trim();
+    const content = document.getElementById('editor').innerHTML.trim();
+
+    if (!title) {
+      alert('Merci de saisir un titre.');
+      return;
+    }
+    if (!content) {
+      alert('Merci de saisir le contenu.');
+      return;
+    }
+
+    const slug = title.toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+
+    const filename = `article-${slug}.html`;
+
+    const articleHTML = `
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>${title}</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Le monde merveilleux de Louise</h1>
+    <nav>
+      <a href="index.html">Accueil</a>
+      <a href="articles.html">Mes écrits</a>
+      <a href="about.html">À propos</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>${title}</h2>
+    <article>
+      ${content}
+    </article>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Le monde merveilleux de Louise</p>
+  </footer>
+</body>
+</html>`.trim();
+
+    const blob = new Blob([articleHTML], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    URL.revokeObjectURL(url);
+    a.remove();
+
+    alert(`Ton article "${title}" est prêt et téléchargé !`);
+    document.getElementById('title').value = '';
+    document.getElementById('editor').innerHTML = '';
+  });
+</script>
+
+</body>
+</html>
